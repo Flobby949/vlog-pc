@@ -5,7 +5,7 @@
       color="#fcb69f"
       dark
       shrink-on-scroll
-      src="../assets/images/bg.jpg"
+      src="https://flobby.oss-cn-shenzhen.aliyuncs.com/background-image/Snipaste_2020-05-15_12-59-02.png"
       scroll-target="#scrolling-techniques-2"
     >
       <template v-slot:img="{ props }">
@@ -61,11 +61,9 @@
       </v-menu>
     </v-app-bar>
     <v-sheet id="scrolling-techniques-2" class="overflow-y-auto">
-
       <v-container style="margin-top:150px;">
         <router-view />
       </v-container>
-      
     </v-sheet>
   </v-card>
 </template>

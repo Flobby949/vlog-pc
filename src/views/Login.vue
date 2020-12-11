@@ -1,22 +1,25 @@
 <template>
   <div class="bg row">
-    <v-form ref="form" v-model="valid" lazy-validation class="col" v-if="!flag">
+    <v-form ref="form" v-model="valid" lazy-validation class="col" style="height:400px">
       <v-text-field v-model="phone" :counter="11" :rules="phoneRules" label="Phone" required></v-text-field>
       <v-text-field v-model="password" :rules="passRules" label="Password" required></v-text-field>
+      <v-row>
+        <v-col cols="12" md="8">
+          <v-text-field v-model="verifyCode" label="verifyCode" required></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <img class="verify" @click.prevent="getVerifyCode" ref="codeImg" />
+        </v-col>
+      </v-row>
 
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[(v) => !!v || '同意才能继续!']"
-        label="同意社区协议？"
-        required
-        ></v-checkbox>
-      
+      <v-checkbox v-model="checkbox" :rules="[(v) => !!v || '同意才能继续!']" label="同意社区协议？" required></v-checkbox>
+
       <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">验证</v-btn>
       <v-btn color="primary" class="mr-4" @click="submit">登录</v-btn>
       <v-btn color="warning" @click="reset">重置</v-btn>
     </v-form>
 
-    <v-dialog v-model="flag" max-width="500" v-else>
+    <!-- <v-dialog v-model="flag" max-width="500" v-else>
           <v-card>
             <v-card-title class="headline grey lighten-2">
               登录成功
@@ -33,24 +36,37 @@
               </v-btn>
             </v-card-actions>
           </v-card>
-    </v-dialog>
+    </v-dialog> -->
     <v-overlay absolute z-index="5" class="mask"></v-overlay>
   </div>
 </template>
 
 <script>
 export default {
-  name:　'Login',
-  data:  () => ({
-    flag: false,
+  name: 'Login',
+  data: () => ({
+    // flag: false,
     valid: true,
     phone: '',
-    phoneRules: [(v) => !!v || '手机号不能为空',(v) => (v && v.length === 11) || '手机号必须11位'],
+    phoneRules: [(v) => !!v || '手机号不能为空', (v) => (v && v.length === 11) || '手机号必须11位'],
     password: '',
-    passRules: [(v) => !!v || '密码不能为空',(v) => (v.length >= 6 && v.length <= 10) || '密码必须在6到10位之间'],
-    checkbox: false
+    passRules: [(v) => !!v || '密码不能为空', (v) => (v.length >= 6 && v.length <= 10) || '密码必须在6到10位之间'],
+    checkbox: false,
+    verifyCode: ''
   }),
-  created() {},
+  created() {
+    //页面创建,请求获得验证码图片
+    this.getVerifyCode()
+  },
+  watch: {
+    phone: function(val, oldval) {
+      if (val.length === 11) {
+        console.log('length' + val.length)
+        console.log('oldval' + oldval)
+        this.getVerifyCode()
+      }
+    }
+  },
   methods: {
     validate() {
       this.$refs.form.validate()
@@ -58,21 +74,34 @@ export default {
     reset() {
       this.$refs.form.reset()
     },
+    getVerifyCode() {
+      //点击验证码图片重新获取验证码
+      this.axios.get('/captcha?phone=' + this.phone, { responseType: 'blob' }).then((res) => {
+        let img = this.$refs.codeImg
+        let url = window.URL.createObjectURL(res.data)
+        img.src = url
+      })
+    },
     submit() {
-      this.axios ({
+      this.axios({
         method: 'POST',
-        url: '/user/login',
+        url: '/user/captchaLogin',
         data: {
           phone: this.phone,
-          password: this.password
+          password: this.password,
+          captcha: this.verifyCode
         }
       }).then((res) => {
-        if(res.data.code === 1) {
-          this.flag = true
-          console.log(this.flag)
-          this.$store.commit('login',res.data.data);
-          
+        console.log(this.phone)
+        console.log(this.password)
+        console.log(this.verifyCode)
+        if (res.data.code === 1) {
+          this.flag = !this.flag
+          alert('登录成功')
+          this.$store.commit('login', res.data.data)
           this.$router.push('/')
+        } else {
+          alert('登录失败')
         }
       })
     }
@@ -95,10 +124,10 @@ export default {
 .bg {
   width: 100%;
   height: 100vh;
-  background: url('https://flobby.oss-cn-shenzhen.aliyuncs.com/background-image/Snipaste_2020-05-15_12-59-02.png');
+  background: url('https://flobby.oss-cn-shenzhen.aliyuncs.com/background-image/001.png');
 }
 .mask {
-  background-image: linear-gradient(to right,#bf30ac 0%,#0f9d58 100%);
+  background-image: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
   opacity: 0.45;
   z-index: 5;
 }
