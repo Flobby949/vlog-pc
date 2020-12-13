@@ -1,8 +1,8 @@
 <template>
   <div class="bg row">
     <v-form ref="form" v-model="valid" lazy-validation class="col" style="height:400px">
-      <v-text-field v-model="phone" :counter="11" :rules="phoneRules" label="Phone" required></v-text-field>
-      <v-text-field v-model="password" :rules="passRules" label="Password" required></v-text-field>
+      <v-text-field v-model="phone" :counter="11" :rules="phoneRules" label="Phone" value="18962521753" required></v-text-field>
+      <v-text-field v-model="password" :rules="passRules" label="Password" value="123123" required></v-text-field>
       <v-row>
         <v-col cols="12" md="8">
           <v-text-field v-model="verifyCode" label="verifyCode" required></v-text-field>
@@ -14,7 +14,7 @@
 
       <v-checkbox v-model="checkbox" :rules="[(v) => !!v || '同意才能继续!']" label="同意社区协议？" required></v-checkbox>
 
-      <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">验证</v-btn>
+      <v-btn :disabled="!valid" color="success" class="mr-4">验证</v-btn>
       <v-btn color="primary" class="mr-4" @click="submit">登录</v-btn>
       <v-btn color="warning" @click="reset">重置</v-btn>
     </v-form>
@@ -54,6 +54,7 @@ export default {
     checkbox: false,
     verifyCode: ''
   }),
+
   created() {
     //页面创建,请求获得验证码图片
     this.getVerifyCode()
@@ -68,6 +69,28 @@ export default {
     }
   },
   methods: {
+    LoginAlertSuccess() {
+      this.$layer.alert(
+        '登录成功',
+        {
+          title: '去看看'
+        },
+        (layerid) => {
+          this.$layer.close(layerid)
+        }
+      )
+    },
+    LoginAlertFail() {
+      this.$layer.alert(
+        '登录失败',
+        {
+          title: '确定'
+        },
+        (layerid) => {
+          this.$layer.close(layerid)
+        }
+      )
+    },
     validate() {
       this.$refs.form.validate()
     },
@@ -92,16 +115,13 @@ export default {
           captcha: this.verifyCode
         }
       }).then((res) => {
-        console.log(this.phone)
-        console.log(this.password)
-        console.log(this.verifyCode)
         if (res.data.code === 1) {
           this.flag = !this.flag
-          alert('登录成功')
+          this.LoginAlertSuccess()
           this.$store.commit('login', res.data.data)
           this.$router.push('/')
         } else {
-          alert('登录失败')
+          this.LoginAlertFail()
         }
       })
     }
