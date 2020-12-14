@@ -116,10 +116,10 @@ export default {
         }
       }).then((res) => {
         if (res.data.code === 1) {
-          this.flag = !this.flag
+          // this.flag = !this.flag
           this.LoginAlertSuccess()
           this.$store.commit('login', res.data.data)
-          this.$router.push('/')
+          this.$router.push('/index')
         } else {
           this.LoginAlertFail()
         }

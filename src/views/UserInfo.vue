@@ -95,16 +95,15 @@ export default {
       let newUser = this.user
       newUser.nickname = this.nickname
       newUser.gender = this.items.indexOf(this.genderSelect) //注意字符串 --> 整型
-      alert(this.items.indexOf(this.genderSelect))
       newUser.birthday = this.birthdayPicker
       newUser.address = `${this.addressSelect.province}-${this.addressSelect.city}-${this.addressSelect.area}`
       this.$store.commit('editUserInfo', newUser)
-      alert(JSON.stringify(newUser))
       this.axios({
         method: 'POST',
         url: '/user/update',
         data: newUser
       }).then((res) => {
+        console.log(res)
         console.log(JSON.stringify(res.data.data))
         this.$store.commit('login', res.data.data)
       })
