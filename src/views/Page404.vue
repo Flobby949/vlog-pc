@@ -5,11 +5,11 @@
       <div class="main">
         <c-container>
           <div class="white--text text-center" style="font-size:130px">404</div>
-          <div class="grey--text text-center" style="font-size:30px">   哎呀╭(╯^╰)╮ 出错了(╥╯^╰╥)</div>
+          <div class="grey--text text-center" style="font-size:30px">哎呀╭(╯^╰)╮ 出错了(╥╯^╰╥)</div>
         </c-container>
       </div>
     </v-main>
-      <footer-bar class="footer-transparent black--text"></footer-bar>
+    <footer-bar class="footer-transparent black--text"></footer-bar>
   </v-app>
 </template>
 
@@ -23,10 +23,10 @@ export default {
   },
   components: {
     NavBar,
-    FooterBar,
+    FooterBar
   },
   created() {},
-  methods: {},
+  methods: {}
 }
 </script>
 
