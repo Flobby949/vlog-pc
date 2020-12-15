@@ -18,25 +18,6 @@
       <v-btn color="primary" class="mr-4" @click="submit">登录</v-btn>
       <v-btn color="warning" @click="reset">重置</v-btn>
     </v-form>
-
-    <!-- <v-dialog v-model="flag" max-width="500" v-else>
-          <v-card>
-            <v-card-title class="headline grey lighten-2">
-              登录成功
-            </v-card-title>
-            <v-img heright="250" src="https://flobby.oss-cn-shenzhen.aliyuncs.com/avatar/163848923.jpg"></v-img>
-            <v-card-text>现在进入我的博客</v-card-text>
-
-            <v-divider></v-divider>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="flag = false">
-                I accept
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-    </v-dialog> -->
     <v-overlay absolute z-index="5" class="mask"></v-overlay>
   </div>
 </template>

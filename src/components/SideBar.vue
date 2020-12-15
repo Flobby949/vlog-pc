@@ -6,11 +6,11 @@
         <v-icon large>mdi-camera</v-icon>
       </v-btn>
 
-      <c-card-title class="white--text">
+      <v-card-title class="white--text">
         <div class="display-1">
           {{ user.nickname }}
         </div>
-      </c-card-title>
+      </v-card-title>
     </v-img>
 
     <v-row class="mt-4">
