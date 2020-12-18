@@ -7,7 +7,17 @@ export default new Vuex.Store({
   state: {
     loginStatus: false,
     avatar: '',
-    user: {}
+    user: {
+      id: 1,
+      phone: '18962521753',
+      password: '4297f44b13955235245b2497399d7a93',
+      nickname: 'Flobby',
+      avatar: 'https://flobby.oss-cn-shenzhen.aliyuncs.com/avatar/447f6179-96be-4f15-88dd-496837a13143.jpg',
+      gender: 0,
+      birthday: 2020 - 12 - 13,
+      address: '江苏省-苏州市-姑苏区',
+      createTime: '2020-12-05 19:07:12'
+    }
   },
   getters: {},
   mutations: {

@@ -23,7 +23,7 @@
                 <h4 class="light-grey--text my-6 pt-6">{{ article.category }}</h4>
                 <h1 class="mt-6 mask pa-6">{{ article.title }}</h1>
                 <div class="text-md-h6 light-grey--text pa-2 mask display">{{ article.summary }}</div>
-                <v-btn rounded dark elevation="12" class="mt-12 px-12 py-6 purple-btn">
+                <v-btn rounded dark elevation="12" class="mt-12 px-12 py-6 purple-btn" @click="gotoDetail(article.id)">
                   <h3>阅读更多</h3>
                 </v-btn>
               </v-img>
@@ -33,7 +33,7 @@
       </v-row>
 
       <v-row style="width: 80%; margin: 0 auto; margin-top: 10px">
-        <v-col cols="12" md="4" v-for="(article, index) in articles" :key="index">
+        <v-col cols="12" md="4" v-for="(article, index) in articles" :key="index" @click="gotoDetail(article.id)">
           <v-hover v-slot="{ hover }">
             <v-card class="rounded-lg" height="550" link :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
               <v-img class="white--text align-end" height="55%" :src="article.cover">
@@ -51,7 +51,7 @@
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions class="px-3 mt-2">
-                <v-btn color="bg-color mr-1" text v-for="(tag, index) in article.tagList" :key="index">{{ tag.tagName }}</v-btn>
+                <v-btn class="bgColor mr-1" text v-for="(tag, index) in article.tagList" :key="index">{{ tag.tagName }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-hover>
@@ -115,8 +115,20 @@ export default {
   },
   methods: {
     //根据是否有发布时间过滤出推荐文章
-    recommend(element) {
-      return element.publishDate === null
+    getIndexList() {
+      this.axios({
+        method: 'GET',
+        url: '/article/recommend',
+        headers: {
+          userId: this.user.id
+        }
+      }).then((res) => {
+        console.log(res.data.data)
+        this.indexList = res.data.data
+        this.indexList.forEach((element) => {
+          this.slides.push(element.cover)
+        })
+      })
     },
     getData() {
       this.axios({
@@ -144,7 +156,7 @@ export default {
         this.pageNum++
         this.getData()
       } else {
-        this.$layout.alert(
+        this.$layer.alert(
           '已经是最后一页~',
           {
             title: '提示',
@@ -172,6 +184,11 @@ export default {
           }
         )
       }
+    },
+    gotoDetail(id) {
+      this.$router.push({
+        path: '/article/' + id
+      })
     }
   }
 }
@@ -219,6 +236,11 @@ export default {
 .bgColor {
   background-image: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
   opacity: 0.7;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16), 0 7px 10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 7px 10px 0 rgba(0, 0, 0, 0.12);
+}
+.greyColor {
+  background-image: linear-gradient(to right, #333 0%, #aaaaaa 100%);
+  opacity: 0.7;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 7px 10px 0 rgba(0, 0, 0, 0.12);
 }
 </style>
