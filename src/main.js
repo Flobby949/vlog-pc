@@ -8,6 +8,13 @@ import vuetify from '@/plugins/vuetify'
 import layer from 'vue-layer'
 import 'vue-layer/lib/vue-layer.css'
 import Distpicker from 'v-distpicker'
+import VueQuillEditor from 'vue-quill-editor'
+
+//富文本编译器
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
+Vue.use(VueQuillEditor /* { default global options } */)
 
 Vue.component('v-distpicker', Distpicker)
 
