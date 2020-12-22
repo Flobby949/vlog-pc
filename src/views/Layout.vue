@@ -1,15 +1,33 @@
 <template>
   <v-app>
     <nav-bar></nav-bar>
-    <v-card>
-      <v-app-bar color="#fcb69f" dark clipped-left src="https://flobby.oss-cn-shenzhen.aliyuncs.com/background-image/001.png" height="500">
+    <!-- <v-card v-if="user.id === loginUser.id">
+      <v-app-bar color="#fcb69f" dark clipped-left :src="loginUser.banner" height="500">
         <template v-slot:img="{ props }">
           <v-img v-bind="props" gradient="to top right, rgba(40,44,52,.6), rgba(211,190,223,.4)"></v-img>
         </template>
+        <v-row justify="center">
+          <v-card-title>
+            <h1>{{ loginUser.signature }}</h1>
+          </v-card-title>
+        </v-row>
+      </v-app-bar>
+    </v-card> -->
+
+    <v-card>
+      <v-app-bar color="#fcb69f" dark clipped-left :src="user.banner" height="500">
+        <template v-slot:img="{ props }">
+          <v-img v-bind="props" gradient="to top right, rgba(40,44,52,.6), rgba(211,190,223,.4)"></v-img>
+        </template>
+        <v-row justify="center">
+          <v-card-title>
+            <h1>{{ user.signature }}</h1>
+          </v-card-title>
+        </v-row>
       </v-app-bar>
     </v-card>
 
-    <v-main>
+    <v-main class="grey lighten-3">
       <v-container class="main-content">
         <router-view />
       </v-container>
@@ -31,6 +49,7 @@ export default {
   computed: {
     ...mapState({
       loginStatus: (state) => state.loginStatus,
+      loginUser: (state) => state.loginUser,
       user: (state) => state.user
     })
   }

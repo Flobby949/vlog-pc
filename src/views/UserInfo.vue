@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field v-model="nickname" :counter="10" :rules="nameRules" label="昵称" :placeholder="user.nickname"></v-text-field>
+    <v-form ref="form" v-model="valid" lazy-validation v-if="user.id === loginUser.id">
+      <v-text-field v-model="nickname" :counter="10" :rules="nameRules" label="昵称" :placeholder="loginUser.nickname"></v-text-field>
       <v-select
         v-model="genderSelect"
         :items="items"
@@ -28,16 +28,21 @@
       <v-btn color="primary" class="mr-12" @click="submit">提交</v-btn>
       <v-btn color="success" @click="reset">重置</v-btn>
     </v-form>
+
+    <div v-else>
+      <message-board></message-board>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import VDistpicker from 'v-distpicker'
+import MessageBoard from '../components/MessageBoard'
 // import { VDaterange } from "vuetify-daterange-picker"
 // import "vuetify-daterange-picker/dist/vuetify-daterange-picker.css"
 export default {
-  name: 'UserInfo',
+  name: 'loginUserInfo',
   data: () => ({
     valid: true,
     nickname: '',
@@ -51,13 +56,15 @@ export default {
   computed: {
     ...mapState({
       loginStatus: (state) => state.loginStatus,
+      loginUser: (state) => state.loginUser,
       user: (state) => state.user
     })
   },
   created() {},
   components: {
     // VDaterange,
-    VDistpicker
+    VDistpicker,
+    MessageBoard
   },
   methods: {
     reset() {
@@ -87,21 +94,21 @@ export default {
     },
     submit() {
       if (this.nickname === '') {
-        this.nickname = this.user.nickname
+        this.nickname = this.loginUser.nickname
       }
       if (this.items.indexOf(this.genderSelect) == -1) {
         this.genderSelect = '保密'
       }
-      let newUser = this.user
-      newUser.nickname = this.nickname
-      newUser.gender = this.items.indexOf(this.genderSelect) //注意字符串 --> 整型
-      newUser.birthday = this.birthdayPicker
-      newUser.address = `${this.addressSelect.province}-${this.addressSelect.city}-${this.addressSelect.area}`
-      this.$store.commit('editUserInfo', newUser)
+      let newloginUser = this.loginUser
+      newloginUser.nickname = this.nickname
+      newloginUser.gender = this.items.indexOf(this.genderSelect) //注意字符串 --> 整型
+      newloginUser.birthday = this.birthdayPicker
+      newloginUser.address = `${this.addressSelect.province}-${this.addressSelect.city}-${this.addressSelect.area}`
+      this.$store.commit('editloginUserInfo', newloginUser)
       this.axios({
         method: 'POST',
-        url: '/user/update',
-        data: newUser
+        url: '/loginUser/update',
+        data: newloginUser
       }).then((res) => {
         console.log(res)
         console.log(JSON.stringify(res.data.data))

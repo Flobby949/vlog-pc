@@ -11,16 +11,48 @@
 
 <script>
 import SideBar from '../components/SideBar'
+import { mapState } from 'vuex'
 export default {
   name: 'My',
   components: {
     SideBar
   },
   data() {
-    return {}
+    return {
+      id: 0
+    }
   },
+  computed: {
+    ...mapState({
+      visitId: (state) => state.visitId,
+      loginStatus: (state) => state.loginStatus,
+      loginUser: (state) => state.loginUser,
+      user: (state) => state.user
+    })
+  },
+  created() {
+    if (this.visitId === '') {
+      this.id = this.loginUser.id
+      this.$store.commit('visitId','')
+      this.$store.commit('visit','')
+    } else {
+      this.id = this.visitId
+      this.$store.commit('visitId','')
+      this.$store.commit('visit','')
+    }
+    // this.id = this.$route.params.id
+    alert('你访问的用户id为' + this.id)
+    this.axios({
+      method: 'GET',
+      url: '/user/' + this.id
+    }).then((res) => {
+      console.log(res.data.data.id)
+      console.log(res.data.data.avatar)
+      console.log(res.data.data.signature)
 
-  created() {},
+      this.$store.commit('visit', res.data.data)
+    })
+  },
   methods: {}
 }
 </script>

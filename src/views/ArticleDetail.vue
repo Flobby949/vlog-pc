@@ -31,10 +31,10 @@
           <v-row class="pl-6 mt-10 grey--text">
             <!-- 发布时间 -->
             <v-icon class="mr-1">mdi-calendar</v-icon>
-            <span class="text-md-h6 font-weight-medium mr-3">发布时间: {{ article.publishDate }}</span>
+            <span class="text-md-h6 font-weight-medium mr-3">发布时间: {{ article.createTime }}</span>
             <!-- 作者 -->
             <v-icon class="mr-1">mdi-account</v-icon>
-            <span class="text-md-h6 font-weight-medium mr-3">作者: {{ user.nickname }}</span>
+            <span class="text-md-h6 font-weight-medium mr-3">作者: {{ article.nickname }}</span>
             <!-- 文章字数 -->
             <v-icon class="mr-1">mdi-file</v-icon>
             <span class="text-md-h6 font-weight-medium mr-3">文章字数: {{ article.totalWords }}</span>
@@ -49,6 +49,21 @@
           <v-divider class="mt-6"></v-divider>
           <!-- 文章内容 -->
           <div class="pa-6" v-html="article.content"></div>
+
+          <v-divider class="mt-6"></v-divider>
+          <!-- 文章评论 -->
+
+          <!-- <v-card
+              class="mx-auto my-2"
+              color="grey lighten-5"
+              dark
+              v-for="(comment, index) in article.commentList" 
+              :key="index"
+          >
+            <v-card-title class="heading font-weight-bold grey--text">{{ comment.content }}</v-card-title>        
+            <v-card-actions></v-card-actions>
+
+          </v-card> -->
         </v-col>
 
         <v-col cols="12" md="4" class="pa-12">
@@ -82,7 +97,7 @@ export default {
   computed: {
     ...mapState({
       loginStatus: (state) => state.loginStatus,
-      user: (state) => state.user
+      loginUser: (state) => state.loginUser
     })
   },
   created() {

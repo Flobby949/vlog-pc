@@ -1,22 +1,21 @@
-<template>
+﻿<template>
   <v-card min-width="320">
-    <v-img :src="imgSrc" height="300px" class="px-3 py-3" dark ref="img">
-      <input type="file" @change="change" ref="input" style="display:none" />
-      <v-btn dark icon @click="handleClick">
+    <v-img :src="user.avatar" height="300px" class="px-3 py-3" dark ref="img">
+      <input type="file" @change="change" ref="input" style="display: none" />
+      <v-btn dark icon @click="handleClick" v-if="user.id === loginUser.id">
         <v-icon large>mdi-camera</v-icon>
       </v-btn>
+    </v-img>
 
-      <v-card-title class="white--text">
+    <v-row class="mt-4">
+      <v-btn class="mx-2" fab dark color="cyan" @click="uploadAvatar" v-if="user.id === loginUser.id">
+        <v-icon dark>mdi-upload</v-icon>
+      </v-btn>
+      <v-card-title>
         <div class="display-1">
           {{ user.nickname }}
         </div>
       </v-card-title>
-    </v-img>
-
-    <v-row class="mt-4">
-      <v-btn class="mx-2" fab dark color="cyan" @click="uploadAvatar">
-        <v-icon dark>mdi-upload</v-icon>
-      </v-btn>
     </v-row>
 
     <v-list two-line>
@@ -37,9 +36,7 @@
 
       <v-list-item>
         <v-list-item-icon>
-          <v-icon color="indigo">
-            mdi-calendar
-          </v-icon>
+          <v-icon color="indigo"> mdi-calendar </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>{{ user.birthday }}</v-list-item-title>
@@ -119,12 +116,13 @@ export default {
     }
   },
   created() {
-    this.imgSrc = this.user.avatar
+    // this.imgSrc = this.user.avatar
   },
   computed: {
     ...mapState({
       loginStatus: (state) => state.loginStatus,
-      user: (state) => state.user
+      user: (state) => state.user,
+      loginUser: (state) => state.loginUser
     }),
     //头像计算属性
     avatar: {
@@ -190,7 +188,7 @@ export default {
           data: newUser
         }).then((res) => {
           console.log(res.data.data)
-          this.imgSrc = this.user.avatar
+          // this.imgSrc = this.user.avatar
           this.$store.commit('editUserInfo', newUser)
         })
       })
@@ -203,7 +201,6 @@ export default {
 a:link {
   text-decoration: none;
 }
-
 * {
   font-size: 16px;
 }

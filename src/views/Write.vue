@@ -101,7 +101,7 @@ export default {
     },
     ...mapState({
       loginStatus: (state) => state.loginStatus,
-      user: (state) => state.user
+      loginUser: (state) => state.loginUser
     })
   },
   methods: {
@@ -142,7 +142,7 @@ export default {
       //创建article对象，即向后端请求发文章接口需要传递的参数
       let article = {
         id: id,
-        userId: this.user.id,
+        loginUserId: this.loginUser.id,
         title: this.title,
         category: this.category,
         summary: '文章摘要文章摘要文章摘要文章摘要文章摘要文章摘要文章摘要文章摘要文章摘要文章摘要',

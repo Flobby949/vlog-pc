@@ -3,12 +3,12 @@
     <v-row class="nav-transparent mx-2 pl-12" justify="space-between" align="center">
       <v-col cols="12" md="3">
         <!-- <router-link to="/index">
-          <h1 class="grey--text">{{ loginloginUser.nickname }}的博客</h1>
+          <h1 class="grey--text">{{ loginUser.nickname }}的博客</h1>
         </router-link> -->
       </v-col>
       <v-col cols="12" md="8">
         <router-link v-for="(item, index) in items" :to="item.path" :key="index" link class="mr-2">
-          <v-btn elevation="6" text large class="nav-item" color="#e0e0e0" style="border:none:outline:none;" @click="check">
+          <v-btn elevation="6" text large class="nav-item" color="#e0e0e0" style="border:none:outline:none;">
             <v-icon right dark class="mr-2">{{ item.icon }}</v-icon>
             {{ item.text }}
           </v-btn>
@@ -72,23 +72,24 @@ export default {
         text: '友链',
         path: '/friend'
       },
-      {
-        icon: 'mdi-account',
-        text: '我的',
-        path: '/my'
-      },
+
       {
         icon: 'mdi-pen',
         text: '写文章',
         path: '/write'
       }
-    ]
+    ],
+    my: {
+      icon: 'mdi-account',
+      text: '我的',
+      // path: '/my'
+      path: '/my/'
+    }
   }),
   computed: {
     ...mapState({
-      loginStatue: (state) => state.loginStatue,
-      loginUser: (state) => state.loginUser,
-      visitId: (state) => state.visitId
+      loginStatus: (state) => state.loginStatus,
+      loginUser: (state) => state.loginUser
     })
   },
   mounted() {
@@ -97,13 +98,16 @@ export default {
       window.addEventListener('scroll', this.onScroll)
     })
   },
+  created() {
+    console.log('用户的id' + this.loginUser.id)
+    console.log('my:')
+    console.log(this.my)
+    this.my.path = this.my.path + '1'
+    this.items.push(this.my)
+    //this.items[5].path == this.items[5].path + 1
+    console.log('创建前')
+  },
   methods: {
-    check() {
-      if (this.$route.path === '/my/userInfo') {
-        window.reload();
-        
-      }
-    },
     onScroll() {
       //取得滚动起点，也就是文档流的顶部
       let scrolled = document.documentElement.scrollTop || document.body.scrollTop
